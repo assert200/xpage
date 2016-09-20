@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'xpage'
-  s.version     = '0.2.0'
-  s.add_runtime_dependency "retryer", ["= 0.2.0"]
+  s.version     = '0.3.0'
+  s.add_runtime_dependency "retryer", ["= 0.3.0"]
   s.date        = '2016-09-20'
   s.summary     = "xpage"
   s.description = "Xpath methods for page objects"
