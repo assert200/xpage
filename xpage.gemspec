@@ -1,8 +1,8 @@
 Gem::Specification.new do |s|
   s.name        = 'xpage'
-  s.version     = '0.4.0'
+  s.version     = '0.4.1'
   s.add_runtime_dependency "selenium-webdriver", [">= 2.50"]
-  s.date        = '2016-09-20'
+  s.date        = '2016-09-21'
   s.summary     = "xpage"
   s.description = "Xpath methods for page objects"
   s.authors     = ["James Barker"]

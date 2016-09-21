@@ -86,7 +86,7 @@ class Xpage
     send_keys_xpath xpath, text
   end
 
-  def self.switch_iframe(xpath)
+  def switch_iframe(xpath)
     wait_for_xpath_to_display xpath
 
     @@wait.until {
