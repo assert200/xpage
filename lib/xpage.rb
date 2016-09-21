@@ -6,8 +6,8 @@ class Xpage
     @@driver = driver
   end
 
-  @@wait = Retryer.new(:timeout => 20, :interval => 1)
-  @@retryer = Retryer::Retry.new(max_retries: 5, interval: 1)
+  @@wait = Retryer.Wait.new(:timeout => 20, :interval => 1, :verbose => false)
+  @@retryer = Retryer::Retry.new(max_retries: 5, interval: 1, :verbose => true)
 
   def get_element(xpath)
     begin
