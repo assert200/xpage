@@ -1,16 +1,20 @@
+require 'selenium-webdriver'
+
 class Xpage
-  SELENIUM_CLIENT_DELAY_SECONDS = 0.01
+  def self.set_driver(driver)
+    @@driver = driver
+  end
+
+  @@wait = Selenium::WebDriver::Wait.new(:timeout => 20, :interval => 1)
 
   def get_element(xpath)
     element = nil
 
-    sleep(SELENIUM_CLIENT_DELAY_SECONDS)
     begin
-      element = $driver.find_element(:xpath, xpath)
+      element = @@driver.find_element(:xpath, xpath)
     rescue
       element = nil
     end
-    sleep(SELENIUM_CLIENT_DELAY_SECONDS)
 
     element
   end
@@ -18,56 +22,62 @@ class Xpage
   def click_xpath(xpath)
     wait_for_xpath_to_display xpath
 
-    sleep(SELENIUM_CLIENT_DELAY_SECONDS)
-
-    retryer.until(description: 'click_xpath') {
+    @@wait.until {
       element = get_element xpath
       element.click
+      true
     }
   end
 
   def clear_xpath(xpath)
     wait_for_xpath_to_display xpath
 
-    retryer.until(description: 'clear_xpath') {
+    @@wait.until {
       element = get_element xpath
       element.clear
+      true
     }
   end
 
   def get_xpath_text(xpath)
     wait_for_xpath_to_exist xpath
 
-    retryer.until(description: 'get_xpath_text') {
+    result = nil
+    @@wait.until {
       element = get_element xpath
-      element.text
+      result = element.text
+      true
     }
+    result
   end
 
   def move_to_xpath(xpath)
     wait_for_xpath_to_display xpath
 
-    retryer.until(description: 'select_xpath') {
+    @@wait.until {
       element = get_element xpath
-      $driver.mouse.move_to element
+      @@driver.mouse.move_to element
+      true
     }
   end
 
   def select_xpath(xpath, option)
     wait_for_xpath_to_display xpath
 
-    retryer.until(description: 'select_xpath') {
+    @@wait.until {
       element = get_element xpath
       Selenium::WebDriver::Support::Select.new(element).select_by(:text, option)
+      true
     }
   end
 
   def send_keys_xpath(xpath, text)
     wait_for_xpath_to_display xpath
 
-    retryer.until(description: 'send_keys_xpath') {
+    @@wait.until {
       element = get_element xpath
       element.send_keys text
+      true
     }
   end
 
@@ -76,25 +86,28 @@ class Xpage
     send_keys_xpath xpath, text
   end
 
-  def switch_iframe(xpath)
+  def self.switch_iframe(xpath)
     wait_for_xpath_to_display xpath
 
-    retryer.until(description: 'switch_iframe') {
+    @@wait.until {
       element = get_element xpath
-      $driver.switch_to.frame(element)
+      @@driver.switch_to.frame(element)
+      true
     }
   end
 
   def switch_to_parent_frame
-    retryer.until(description: 'switch_to_parent_frame') {
-      $driver.switch_to.window($driver.window_handles.first)
+    @@wait.until {
+      @@driver.switch_to.window(@driver.window_handles.first)
+      true
     }
   end
 
   def text_displayed?(text)
     elements = nil
-    retryer.until(description: 'text_displayed?') {
-      elements = $driver.find_elements(:xpath, "//*[contains(text(),'#{text}')]")
+    @@wait.until {
+      elements = @@driver.find_elements(:xpath, "//*[contains(text(),'#{text}')]")
+      true
     }
 
     elements.each do |element|
@@ -106,26 +119,27 @@ class Xpage
   end
 
   def wait_for_xpath_to_be_enabled(xpath)
-    wait.until { xpath_enabled? xpath }
+    @@wait.until { xpath_enabled? xpath }
   end
 
   def wait_for_xpath_to_display(xpath)
-    wait.until { xpath_displayed? xpath }
+    @@wait.until { xpath_displayed? xpath }
   end
 
   def wait_for_xpath_to_exist(xpath)
-    wait.until { xpath_exists? xpath }
+    @@wait.until { xpath_exists? xpath }
   end
 
   def xpath_displayed?(xpath)
     result = false
-    retryer.until(description: 'xpath_displayed?') {
+    @@wait.until {
       element = get_element xpath
       if element.nil?
         result = false
       else
         result = element.displayed?
       end
+      true
     }
     result
   end
@@ -134,9 +148,10 @@ class Xpage
     wait_for_xpath_to_exist xpath
 
     result = false
-    retryer.until(description: 'xpath_enabled?') {
+    @@wait.until {
       element = get_element xpath
       result = element.enabled?
+      true
     }
     result
   end
@@ -151,10 +166,13 @@ class Xpage
 
   def xpath_selected?(xpath)
     wait_for_xpath_to_exist xpath
-
-    retryer.until(description: 'xpath_selected?') {
+    result=false
+    @@wait.until {
       element = get_element xpath
-      element.selected?
+      result = element.selected?
+      true
     }
+    result
   end
+
 end
