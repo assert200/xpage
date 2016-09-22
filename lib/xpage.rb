@@ -87,7 +87,7 @@ class Xpage
 
   def switch_to_parent_frame
     @@retryer.do(description: 'switch_to_parent_frame') {
-      @@driver.switch_to.window(@driver.window_handles.first)
+      @@driver.switch_to.window(@@driver.window_handles.first)
     }
   end
 
