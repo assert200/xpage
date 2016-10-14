@@ -94,7 +94,7 @@ class Xpage
   def text_displayed?(text)
     elements = nil
     @@retryer.do(description: 'text_displayed?') {
-      elements = @@driver.find_elements(:xpath, "//*[contains(text(),'#{text}')]")
+      elements = @@driver.find_elements(:xpath, "//*[contains(.,'#{text}')]")
     }
 
     elements.each do |element|
