@@ -22,7 +22,7 @@ class GooglePage < Xpage
   end
 
   def displayed?
-    xpath_displayed?(@query) and xpath_displayed?(@search) 
+    xpath_displayed?(@query) 
   end
 
   def set_query(text)
@@ -35,6 +35,7 @@ class GooglePage < Xpage
 end
 
 google_page=GooglePage.new
+google_page.displayed?
 google_page.set_query("test")
 google_page.click_search()
 
