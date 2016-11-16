@@ -1,4 +1,4 @@
-require_relative 'retryer.rb'
+require 'retryer'
 
 class Xpage
   def self.set_driver(driver)
