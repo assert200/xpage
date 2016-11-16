@@ -1,5 +1,4 @@
-require 'retryer'
-require 'selenium-webdriver'
+require_relative 'retryer.rb'
 
 class Xpage
   def self.set_driver(driver)
@@ -10,11 +9,13 @@ class Xpage
   @@retryer = Retryer::Retry.new(max_retries: 5, interval: 1, :verbose => true)
 
   def get_element(xpath)
-    begin
-      @@driver.find_element(:xpath, xpath)
-    rescue
-      nil
-    end
+    @@retryer.do(description: 'get_element') {
+      begin
+        @@driver.find_element(:xpath, xpath)
+      rescue Selenium::WebDriver::Error::NoSuchElementError
+        nil # element doesn't exist
+      end
+    }
   end
 
   def click_xpath(xpath)
@@ -71,6 +72,15 @@ class Xpage
     }
   end
 
+  def send_keys_slowly_xpath(xpath, text, speed=0.8)
+    wait_for_xpath_to_display xpath
+
+    text.each_char { |c|
+      send_keys_xpath(xpath, c)
+      sleep(speed)
+    }
+  end
+
   def set_xpath(xpath, text)
     clear_xpath xpath
     send_keys_xpath xpath, text
@@ -85,9 +95,15 @@ class Xpage
     }
   end
 
-  def switch_to_parent_frame
-    @@retryer.do(description: 'switch_to_parent_frame') {
+  def switch_to_first_frame
+    @@retryer.do(description: 'switch_to_first_frame') {
       @@driver.switch_to.window(@@driver.window_handles.first)
+    }
+  end
+
+  def switch_to_last_frame
+    @@retryer.do(description: 'switch_to_last_frame') {
+      @@driver.switch_to.window(@@driver.window_handles.last)
     }
   end
 
