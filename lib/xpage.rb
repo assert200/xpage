@@ -26,6 +26,15 @@ class Xpage
       element.click
     }
   end
+  
+  def get_xpath_attribute(xpath, attribute)
+    wait_for_xpath_to_display xpath
+
+    @@retryer.do(description: 'get_xpath_attribute') {
+      element = get_element xpath
+      element.attribute(attribute)
+    }
+  end
 
   def clear_xpath(xpath)
     wait_for_xpath_to_display xpath
