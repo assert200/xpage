@@ -28,7 +28,7 @@ class Xpage
   end
   
   def get_xpath_attribute(xpath, attribute)
-    wait_for_xpath_to_display xpath
+    wait_for_xpath_to_exist xpath
 
     @@retryer.do(description: 'get_xpath_attribute') {
       element = get_element xpath
