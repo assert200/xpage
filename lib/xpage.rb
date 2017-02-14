@@ -1,4 +1,4 @@
-require_relative 'retryer.rb'
+require 'retryer'
 
 class Xpage
   def self.set_driver(driver)
@@ -24,6 +24,15 @@ class Xpage
     @@retryer.do(description: 'click_xpath') {
       element = get_element xpath
       element.click
+    }
+  end
+  
+  def get_xpath_attribute(xpath, attribute)
+    wait_for_xpath_to_exist xpath
+
+    @@retryer.do(description: 'get_xpath_attribute') {
+      element = get_element xpath
+      element.attribute(attribute)
     }
   end
 
