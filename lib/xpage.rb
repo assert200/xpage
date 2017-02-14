@@ -72,12 +72,12 @@ class Xpage
     }
   end
 
-  def send_keys_xpath(xpath, text)
+  def send_keys_xpath(xpath, args)
     wait_for_xpath_to_display xpath
 
     @@retryer.do(description: 'send_keys_xpath') {
       element = get_element xpath
-      element.send_keys text
+      element.send_keys args
     }
   end
 
@@ -90,9 +90,9 @@ class Xpage
     }
   end
 
-  def set_xpath(xpath, text)
+  def set_xpath(xpath, args)
     clear_xpath xpath
-    send_keys_xpath xpath, text
+    send_keys_xpath xpath, args
   end
 
   def switch_iframe(xpath)
@@ -195,6 +195,9 @@ class Xpage
     elsif method[0..3]=="get_" && method[-5..-1]=='_text'
       extracted=method[4..-6]
       @eval = "get_xpath_text(@#{extracted})"
+    elsif method[0..6]=="select_"
+      extracted=method[7..-1]
+      @eval = "select_xpath(@#{extracted},args[0])"
     end
 
     eval @eval
