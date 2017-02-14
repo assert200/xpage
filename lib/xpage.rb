@@ -178,4 +178,27 @@ class Xpage
       element.selected?
     }
   end
+  
+  def method_missing(method, *args, &block)
+    method = method.to_s
+    @eval='raise "Method not found for: #{method}"'
+
+    if method[0..5]=='click_'
+      extracted=method[6..-1]
+      @eval = "click_xpath @#{extracted}"
+    elsif method[-11..-1]=='_displayed?'
+      extracted=method[0..-12]
+      @eval = "xpath_displayed? @#{extracted}"
+    elsif method[0..3]=="set_"
+      extracted=method[4..-1]
+      @eval = "set_xpath(@#{extracted},args)"
+    elsif method[0..3]=="get_" && method[-5..-1]=='_text'
+      extracted=method[4..-6]
+      @eval = "get_xpath_text(@#{extracted})"
+    end
+
+    eval @eval
+
+  end
+
 end
