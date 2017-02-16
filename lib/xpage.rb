@@ -29,7 +29,7 @@ class Xpage
         element = get_element xpath
         element.click
       }
-    rescue e
+    rescue Exception => e
       p "WARNING: Couldn't click_xpath #{xpath} with error: #{e}"
     end
   end
