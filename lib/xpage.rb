@@ -131,15 +131,15 @@ class Xpage
   end
 
   def wait_for_xpath_to_be_enabled(xpath)
-    @@wait.until { xpath_enabled? xpath }
+    @@wait.until(description: 'wait_for_xpath_to_be_enabled') { xpath_enabled? xpath }
   end
 
   def wait_for_xpath_to_display(xpath)
-    @@wait.until { xpath_displayed? xpath }
+    @@wait.until(description: 'wait_for_xpath_to_display') { xpath_displayed? xpath }
   end
 
   def wait_for_xpath_to_exist(xpath)
-    @@wait.until { xpath_exists? xpath }
+    @@wait.until(description: 'wait_for_xpath_to_exist') { xpath_exists? xpath }
   end
 
   def xpath_displayed?(xpath)
@@ -181,6 +181,7 @@ class Xpage
   
   def method_missing(method, *args, &block)
     method = method.to_s
+    p "method: " + method
     @eval='raise "Method not found for: #{method}"'
 
     if method[-11..-1]=='_displayed?'
@@ -200,6 +201,7 @@ class Xpage
       @eval = "select_xpath(@#{extracted},args[0])"
     end
 
+    p "@eval: " + @eval
     eval @eval
 
   end
