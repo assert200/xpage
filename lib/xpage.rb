@@ -184,6 +184,9 @@ class Xpage
     if method[-11..-1]=='_displayed?'
       extracted=method[0..-12]
       @eval = "xpath_displayed? @#{extracted}"
+    if method[-10..-1]=='_selected?'
+      extracted=method[0..-11]
+      @eval = "xpath_selected? @#{extracted}"
     elsif method[0..3]=="get_" && method[-5..-1]=='_text'
       extracted=method[4..-6]
       @eval = "get_xpath_text(@#{extracted})"
