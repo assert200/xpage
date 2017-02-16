@@ -8,6 +8,8 @@ class Xpage
   @@wait = Retryer::Wait.new(:timeout => 20, :interval => 1, :verbose => false)
   @@retryer = Retryer::Retry.new(max_retries: 5, interval: 1, :verbose => true)
 
+  SLEEP_DURATION = 0.2
+
   def get_element(xpath)
     @@retryer.do(description: 'get_element') {
       begin
@@ -21,12 +23,17 @@ class Xpage
   def click_xpath(xpath)
     wait_for_xpath_to_display xpath
 
-    @@retryer.do(description: 'click_xpath') {
-      element = get_element xpath
-      element.click
-    }
+    begin
+      @@retryer.do(description: 'click_xpath') {
+        sleep(DURATION)
+        element = get_element xpath
+        element.click
+      }
+    rescue e
+      p "WARNING: Couldn't click_xpath #{xpath} with error: #{e}"
+    end
   end
-  
+
   def get_xpath_attribute(xpath, attribute)
     wait_for_xpath_to_exist xpath
 
@@ -71,7 +78,7 @@ class Xpage
       Selenium::WebDriver::Support::Select.new(element).select_by(:text, option)
     }
   end
-  
+
   def send_keys(args)
     @@retryer.do(description: 'send_keys') {
       @@driver.action.send_keys(args).perform
@@ -184,7 +191,7 @@ class Xpage
       element.selected?
     }
   end
-  
+
   def method_missing(method, *args, &block)
     method = method.to_s
     if method[-11..-1]=='_displayed?'
