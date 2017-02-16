@@ -71,6 +71,12 @@ class Xpage
       Selenium::WebDriver::Support::Select.new(element).select_by(:text, option)
     }
   end
+  
+  def send_keys(args)
+    @@retryer.do(description: 'send_keys') {
+      @@driver.action.send_keys(args).perform
+    }
+  end
 
   def send_keys_xpath(xpath, args)
     wait_for_xpath_to_display xpath
