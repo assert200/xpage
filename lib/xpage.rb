@@ -25,7 +25,7 @@ class Xpage
 
     begin
       @@retryer.do(description: 'click_xpath') {
-        sleep(DURATION)
+        sleep(SLEEP_DURATION)
         element = get_element xpath
         element.click
       }
