@@ -181,9 +181,6 @@ class Xpage
   
   def method_missing(method, *args, &block)
     method = method.to_s
-    p "method: " + method
-    @eval='raise "Method not found for: #{method}"'
-
     if method[-11..-1]=='_displayed?'
       extracted=method[0..-12]
       @eval = "xpath_displayed? @#{extracted}"
@@ -199,11 +196,11 @@ class Xpage
     elsif method[0..6]=="select_"
       extracted=method[7..-1]
       @eval = "select_xpath(@#{extracted},args[0])"
+    else
+      raise "Method not found for: #{method}"
     end
 
-    p "@eval: " + @eval
     eval @eval
 
   end
-
 end
