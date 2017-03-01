@@ -66,7 +66,7 @@ class Xpage
 
     @@retryer.do(description: 'move_to_xpath') {
       element = get_element xpath
-      @@driver.mouse.move_to element
+      @@driver.action.move_to(element).perform
     }
   end
 
