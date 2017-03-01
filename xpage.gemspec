@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'xpage'
-  s.version     = '0.6.1'
+  s.version     = '0.6.2'
   s.add_runtime_dependency 'retryer', '= 0.4.3'
   s.date        = '2016-11-16'
   s.summary     = 'xpage'
